@@ -1,45 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import {
+    DndContext,
+    closestCenter,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
+import {
+    SortableContext,
+    rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableItem from "../SortableItem";
 import { FaPlus } from "react-icons/fa";
+import { arrayMove } from "@dnd-kit/sortable";
 
-export default function ButtonArea({ setActiveOptions }) {
-    const storedButtons = JSON.parse(localStorage.getItem("buttons")) || [];
-    const [AddButton, setAddButton] = useState(storedButtons);
+export default function ButtonArea({
+    buttons,
+    setButtons,
+    selectedButton,
+    setSelectedButton,
+    AddNewButton,
+}) {
+    const [draggingButtonId, setDraggingButtonId] = useState(null);
 
-    const AddNewButton = () => {
-        const newButton = { id: AddButton.length + 1, label: `Button ${AddButton.length + 1}` };
-        setAddButton((prev) => [...prev, newButton]);
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 10 },
+        })
+    );
+
+    console.log('selectedButton', selectedButton);
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (!over) return;
+
+        const activeButton = buttons.find((button) => button.id === active.id);
+        const overButton = buttons.find((button) => button.id === over.id);
+
+        if (activeButton?.isFixed || overButton?.isFixed) return;
+
+        if (active.id !== over.id) {
+            const oldIndex = buttons.findIndex((button) => button.id === active.id);
+            const newIndex = buttons.findIndex((button) => button.id === over.id);
+
+            const reorderedButtons = arrayMove(buttons, oldIndex, newIndex);
+
+            setButtons(reorderedButtons);
+            localStorage.setItem("buttons", JSON.stringify(reorderedButtons));
+        }
+
+        setDraggingButtonId(null);
     };
 
-    useEffect(() => {
-        localStorage.setItem("buttons", JSON.stringify(AddButton));
-        console.log("Updated AddButton array:", AddButton);
-    }, [AddButton]); // Runs whenever AddButton changes
+    const handleDragStart = (event) => {
+        setDraggingButtonId(event.active.id);
+    };
+
+
+    console.log('columns', buttons.map(button => button.columns));
 
     return (
-        <main className="relative flex-1 p-6 bg-gray-600">
+        <main className="relative flex-1 p-6 bg-gray-200 dark:bg-gray-600">
             <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
-
-            {/* Display buttons dynamically */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {AddButton.map((button) => (
-                    <button
-                        key={button.id}
-                        className="py-2 px-4 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-
-                    >
-                        {button.label}
-                    </button>
-                ))}
-            </div>
-
-            <div className="mt-15">
-                <button
-                    onClick={AddNewButton}
-                    className="absolute bottom-3 left-3 bg-primary text-white text-lg py-3 px-3 rounded-full"
+            <div className="mb-12">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                    onDragStart={handleDragStart}
                 >
-                    <FaPlus />
-                </button>
+                    <SortableContext
+                        items={buttons.map((button) => button.id)}
+                        strategy={rectSortingStrategy}
+                    >
+                        {/* الشبكة العامة */}
+                        <div className="grid grid-cols-12 gap-4">
+                            {buttons.map((button) => {
+                                const isDragging = button.id === draggingButtonId;
+                                return (
+                                    <div
+                                        key={button.id}
+                                        className={`col-span-${(button.columns || 3)} ${isDragging ? 'shadow-lg' : ''}`}
+
+                                    >
+                                        <SortableItem
+                                            id={button.id}
+                                            button={button}
+                                            onClick={() => setSelectedButton(button)}
+                                            selectedButton={selectedButton}
+                                        />
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                    </SortableContext>
+                </DndContext>
             </div>
+            <button
+                onClick={AddNewButton}
+                className="absolute bottom-3 left-3 bg-primary text-white text-lg py-3 px-3 rounded-full"
+            >
+                <FaPlus />
+            </button>
         </main>
     );
 }

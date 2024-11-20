@@ -27,7 +27,7 @@ const ButtonSidebar = ({ toggleButtonSidebar, showButtonSidebar }) => {
         <div className='relative'>
             <aside
                 className={`${showButtonSidebar ? 'block' : 'hidden'
-                    } xl:relative absolute left-0 top-0 z-50 w-55 bg-gray-800 text-white h-screen duration-300 ease-linear transition-width`}
+                    } xl:relative absolute left-0 top-0 z-50 w-55 shadow-lg shadow-gray-500/50 dark:shadow-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white h-screen duration-300 ease-linear transition-width`}
             >
 
                 <div className='flex justify-between p-4 border-1'>
@@ -47,7 +47,7 @@ const ButtonSidebar = ({ toggleButtonSidebar, showButtonSidebar }) => {
                             >
                                 <Link
                                     to={item.path}
-                                    className={`relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${item.path === location.pathname ? 'bg-graydark' : ''
+                                    className={`relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-gray-900 dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-meta-4 ${item.path === location.pathname ? 'bg-gray-100 dark:bg-meta-4' : ''
                                         }`}
                                 >
                                     {item.icon}

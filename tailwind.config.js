@@ -213,7 +213,6 @@ module.exports = {
         99999: '99999',
         9999: '9999',
         999: '999',
-        1: '1',
       },
       boxShadow: {
         glow: '0px 0px 5px 2px rgba(0, 0, 0, 0.1)',

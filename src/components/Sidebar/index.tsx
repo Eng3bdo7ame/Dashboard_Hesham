@@ -39,7 +39,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }: SidebarProps) => {
 
   return (
     <aside
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden dark:bg-meta-4 bg-white duration-300 ease-linear  lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -68,8 +68,10 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }: SidebarProps) => {
                 >
                   <NavLink
                     to={item.path}
-                    className={`relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      item.path === location.pathname ? 'bg-graydark' : ''
+                    className={`relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-gray-800 dark:text-bodydark1 duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-meta-4 ${
+                      item.path === location.pathname
+                        ? 'bg-gray-100 dark:bg-meta-4'
+                        : ''
                     }`}
                   >
                     {item.icon}

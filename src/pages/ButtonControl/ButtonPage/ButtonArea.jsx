@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     DndContext,
     closestCenter,
@@ -22,6 +22,8 @@ export default function ButtonArea({
     AddNewButton,
 }) {
     const [draggingButtonId, setDraggingButtonId] = useState(null);
+    const containerRef = useRef(null); // مرجع للمكون الأساسي
+
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -59,10 +61,33 @@ export default function ButtonArea({
     };
 
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                containerRef.current && // التحقق من وجود المرجع
+                !containerRef.current.contains(event.target) // التحقق إذا كان النقر خارج المكون
+            ) {
+                setSelectedButton(null); // إلغاء التحديد
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        // تنظيف المستمع عند إزالة المكون
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [setSelectedButton]);
+
+
+
+
     console.log('columns', buttons.map(button => button.columns));
 
     return (
-        <main className="relative flex-1 p-6 bg-gray-200 dark:bg-gray-600">
+        <main
+            ref={containerRef}
+            className="relative flex-1 p-6 bg-gray-200 dark:bg-gray-600">
             <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
             <div className="mb-12">
                 <DndContext

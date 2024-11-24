@@ -24,14 +24,11 @@ export default function ButtonArea({
     const [draggingButtonId, setDraggingButtonId] = useState(null);
     const containerRef = useRef(null); // مرجع للمكون الأساسي
 
-
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: { distance: 10 },
         })
     );
-
-    console.log('selectedButton', selectedButton);
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
@@ -60,12 +57,13 @@ export default function ButtonArea({
         setDraggingButtonId(event.active.id);
     };
 
-
+    // إضافة الـ useEffect للمراقبة عند النقر خارج المكون
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
                 containerRef.current && // التحقق من وجود المرجع
-                !containerRef.current.contains(event.target) // التحقق إذا كان النقر خارج المكون
+                !containerRef.current.contains(event.target) && // التحقق إذا كان النقر خارج المكون
+                !event.target.closest("button") // التحقق إذا كان النقر داخل زر
             ) {
                 setSelectedButton(null); // إلغاء التحديد
             }
@@ -80,12 +78,9 @@ export default function ButtonArea({
     }, [setSelectedButton]);
 
 
-
-
-    console.log('columns', buttons.map(button => button.columns));
-
     return (
         <main
+            ref={containerRef} // إضافة المرجع هنا
             className="relative flex-1 p-6 bg-gray-200 dark:bg-gray-600">
             <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
             <div className="mb-12">
@@ -108,7 +103,6 @@ export default function ButtonArea({
                                         key={button.id}
                                         className={`col-span-${button.columns || 3} ${isDragging ? 'shadow-lg' : ''}`}
                                         style={{ gridColumn: `span ${button.columns || 3} / span ${button.columns || 3}` }}
-
                                     >
                                         <SortableItem
                                             id={button.id}

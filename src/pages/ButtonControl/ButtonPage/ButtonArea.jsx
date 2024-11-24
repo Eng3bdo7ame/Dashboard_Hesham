@@ -86,7 +86,6 @@ export default function ButtonArea({
 
     return (
         <main
-            ref={containerRef}
             className="relative flex-1 p-6 bg-gray-200 dark:bg-gray-600">
             <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
             <div className="mb-12">

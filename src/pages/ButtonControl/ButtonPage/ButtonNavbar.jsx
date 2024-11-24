@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GiMove } from "react-icons/gi";
 import { FaPlus } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
@@ -8,6 +8,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 
 const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementClick, handleRenameClick, deleteButton, handleMovementButton }) => {
     const [showMenu, setShowMenu] = useState(false);
+    const menuRef = useRef(null); // مرجع للقائمة المنسدلة وزر التبديل
 
     const toggleShowMenu = () => {
         setShowMenu(!showMenu);
@@ -46,6 +47,25 @@ const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementCli
         },
     ];
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        if (showMenu) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showMenu]);
+
+
     return (
         <>
             <nav className="bg-white dark:bg-gray-800 text-white p-4 flex justify-between w-full items-center shadow-lg shadow-gray-500/50 dark:shadow-none">
@@ -74,7 +94,7 @@ const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementCli
                     <h1 className="text-gray-900 dark:text-white  text-xl font-bold">الرئيسيه للتحكم</h1>
                 </div>
 
-                <div className="relative">
+                <div className="relative" ref={menuRef}>
                     <div className="xl:hidden lg:flex items-center justify-end">
                         <button
                             onClick={toggleShowMenu}
@@ -89,7 +109,10 @@ const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementCli
                                 {buttons.map((button, index) => (
                                     <li className="p-2" key={index}>
                                         <button
-                                            onClick={button.action}
+                                            onClick={() => {
+                                                button.action?.(); // تنفيذ الإجراء إذا كان موجودًا
+                                                setShowMenu(false); // غلق القائمة
+                                            }}
                                             className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded"
                                         >
                                             {button.icon} {button.name}
@@ -99,6 +122,7 @@ const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementCli
                             </ul>
                         </div>
                     )}
+
                 </div>
             </nav>
         </>

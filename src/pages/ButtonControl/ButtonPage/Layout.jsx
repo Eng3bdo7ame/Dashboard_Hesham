@@ -99,10 +99,6 @@ export default function Layout() {
         localStorage.setItem("buttons", JSON.stringify(updatedButtons)); // تحديث الترتيب في localStorage
     };
 
-
-
-
-
     return (
         <div className="flex h-screen overflow-hidden bg-white dark:bg-gray-900">
             <ButtonSidebar

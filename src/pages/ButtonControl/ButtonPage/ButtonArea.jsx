@@ -57,7 +57,6 @@ export default function ButtonArea({
         setDraggingButtonId(event.active.id);
     };
 
-    // إضافة الـ useEffect للمراقبة عند النقر خارج المكون
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -71,7 +70,6 @@ export default function ButtonArea({
 
         document.addEventListener("mousedown", handleClickOutside);
 
-        // تنظيف المستمع عند إزالة المكون
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };

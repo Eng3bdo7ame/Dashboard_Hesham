@@ -106,7 +106,8 @@ export default function ButtonArea({
                                 return (
                                     <div
                                         key={button.id}
-                                        className={`col-span-${(button.columns || 3)} ${isDragging ? 'shadow-lg' : ''}`}
+                                        className={`col-span-${button.columns || 3} ${isDragging ? 'shadow-lg' : ''}`}
+                                        style={{ gridColumn: `span ${button.columns || 3} / span ${button.columns || 3}` }}
 
                                     >
                                         <SortableItem

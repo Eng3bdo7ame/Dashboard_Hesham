@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-const Rename = ({ selectedButton, onClose, updateButton }) => {
+const Rename = ({ selectedButton, onClose, updateButton, setSelectedButton }) => {
     const [name, setName] = useState(selectedButton?.name || "");
     const handleSubmit = (e) => {
         e.preventDefault();
         updateButton(selectedButton.id, { name });
+        setSelectedButton(null);
         onClose();
     };
 

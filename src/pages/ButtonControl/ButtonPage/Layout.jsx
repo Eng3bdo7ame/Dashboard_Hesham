@@ -37,6 +37,7 @@ export default function Layout() {
             );
             setButtons(updatedButtons);
             localStorage.setItem("buttons", JSON.stringify(updatedButtons));
+            setSelectedButton(null);
         } else {
             alert("من فضلك اختر زرًا لتثبيته أو إلغاء تثبيته!");
         }
@@ -135,6 +136,7 @@ export default function Layout() {
                     selectedButton={selectedButton}
                     onClose={() => setShowForm(false)}
                     updateButton={updateButton}
+                    setSelectedButton={setSelectedButton}
                 />
             )}
 
@@ -143,6 +145,7 @@ export default function Layout() {
                     selectedButton={selectedButton}
                     onClose={() => setShowRenameForm(false)}
                     updateButton={updateButton}
+                    setSelectedButton={setSelectedButton}
                 />
             )}
 

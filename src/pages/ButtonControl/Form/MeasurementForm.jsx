@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const MeasurementForm = ({ selectedButton, onClose, updateButton }) => {
+const MeasurementForm = ({ selectedButton, onClose, updateButton, setSelectedButton }) => {
     const [columns, setColumns] = useState(selectedButton?.columns || 3);
     const [height, setHeight] = useState(selectedButton?.height || 50);
 
@@ -8,6 +8,7 @@ const MeasurementForm = ({ selectedButton, onClose, updateButton }) => {
         e.preventDefault();
         updateButton(selectedButton.id, { columns, height });
         onClose();
+        setSelectedButton(null)
     };
 
     return (

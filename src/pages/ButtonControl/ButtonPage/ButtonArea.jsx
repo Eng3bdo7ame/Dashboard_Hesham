@@ -88,7 +88,7 @@ export default function ButtonArea({
                                         <SortableItem
                                             id={button.id}
                                             button={button}
-                                            onClick={() => setSelectedButton(button)}
+                                            onClick={setSelectedButton}
                                             selectedButton={selectedButton}
                                         />
                                     </div>

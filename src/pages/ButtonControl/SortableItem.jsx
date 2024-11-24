@@ -1,8 +1,8 @@
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BsPinAngleFill } from "react-icons/bs";
 import { FcOk } from "react-icons/fc";
-
 export default function SortableItem({ id, button, onClick, selectedButton }) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
         id,
@@ -15,6 +15,13 @@ export default function SortableItem({ id, button, onClick, selectedButton }) {
         height: button.height,
     };
 
+    const handleClick = () => {
+        if (selectedButton?.id === button.id) {
+            onClick(null); // إلغاء التحديد إذا كان محددًا بالفعل
+        } else {
+            onClick(button); // تحديد الزر
+        }
+    };
 
     return (
         <button
@@ -22,7 +29,7 @@ export default function SortableItem({ id, button, onClick, selectedButton }) {
             style={style}
             {...attributes}
             {...(button.isFixed ? {} : listeners)} // منع الاستماع للأحداث إذا كان الزر مثبتًا
-            onClick={onClick}
+            onClick={handleClick}
             className={`w-full flex items-center justify-center gap-2 text-white py-2 px-4 rounded shadow ${button.isFixed ? "bg-gray-400 text-white hover:bg-gray-400 cursor-not-allowed" : "bg-blue-500"} ${selectedButton?.id === button.id ? "bg-green-300 hover:bg-green-300 text-black font-bold" : ""} " hover:bg-blue-600 focus:outline-none"`}
         >
             {button.isFixed && <BsPinAngleFill /> || selectedButton?.id === button.id && <FcOk />}{button.name || `Button ${button.id}`}

@@ -14,6 +14,8 @@ export default function Layout() {
     );
     const [showForm, setShowForm] = useState(false);
     const [showRenameForm, setShowRenameForm] = useState(false);
+    const [buttonName, setbuttonName] = useState("تثبيت");
+    const [isMoving, setIsMoving] = useState(false);
 
     const toggleButtonSidebar = () => {
         setShowButtonSidebar(!showButtonSidebar);
@@ -38,11 +40,17 @@ export default function Layout() {
             setButtons(updatedButtons);
             localStorage.setItem("buttons", JSON.stringify(updatedButtons));
             setSelectedButton(null);
+
+            setIsMoving(!isMoving);
+            setbuttonName(isMoving ? "تثبيت" : "تحريك");
         } else {
             alert("من فضلك اختر زرًا لتثبيته أو إلغاء تثبيته!");
         }
 
     };
+
+
+
 
 
     const handleRenameClick = () => {
@@ -114,6 +122,8 @@ export default function Layout() {
                     handleRenameClick={handleRenameClick}
                     deleteButton={handleDeleteButton}
                     handleMovementButton={handleMovementButton}
+                    buttonName={buttonName}
+
                 />
                 <div className="flex p-6">
                     <ButtonArea

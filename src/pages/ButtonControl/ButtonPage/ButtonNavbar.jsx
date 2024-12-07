@@ -6,13 +6,16 @@ import { AiOutlineFullscreen } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { AiOutlineMenu } from "react-icons/ai";
 
-const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementClick, handleRenameClick, deleteButton, handleMovementButton }) => {
+const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementClick, handleRenameClick, buttonName, deleteButton, handleMovementButton }) => {
     const [showMenu, setShowMenu] = useState(false);
+
     const menuRef = useRef(null); // مرجع للقائمة المنسدلة وزر التبديل
 
     const toggleShowMenu = () => {
         setShowMenu(!showMenu);
     };
+
+
 
     const buttons = [
         {
@@ -23,9 +26,12 @@ const ButtonNavbar = ({ toggleButtonSidebar, showButtonSidebar, onMeasurementCli
         },
         {
             id: 2,
-            name: "تحريك وتثبيت",
+            name: buttonName,
             icon: <GiMove />,
-            action: handleMovementButton
+            action: () => {
+                handleMovementButton();
+                toggleMovementState(); // تغيير النص عندما يتم الضغط على الزر
+            }
         },
         {
             id: 3,
